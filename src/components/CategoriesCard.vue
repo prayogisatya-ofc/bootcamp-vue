@@ -1,5 +1,5 @@
 <script>
-import { RouterView } from 'vue-router'
+import { RouterLink } from 'vue-router'
 export default {
   props: {
     title: String,

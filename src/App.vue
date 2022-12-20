@@ -1,6 +1,12 @@
-<script setup>
+<script>
 import { RouterView } from 'vue-router'
 import Navbar from './components/Navbar.vue'
+
+export default {
+  components: {
+    Navbar
+  }
+}
 </script>
 
 <template>
@@ -11,7 +17,7 @@ import Navbar from './components/Navbar.vue'
 <style>
 @import '@/assets/css/styles.css';
 
-.router-link-active {
+.nav-link.router-link-active {
   color: rgb(79, 70, 229) !important
 }
 </style>

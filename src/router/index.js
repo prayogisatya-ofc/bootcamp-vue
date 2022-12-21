@@ -5,6 +5,8 @@ import RegisterView from '../views/RegisterView.vue'
 import DetailView from '../views/DetailView.vue'
 import PriceView from '../views/PriceView.vue'
 import SuccessView from '../views/SuccessView.vue'
+import CategoriesView from '../views/CategoriesView.vue'
+import CategoryView from '../views/CategoryView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,7 +27,7 @@ const router = createRouter({
       component: RegisterView
     },
     {
-      path: '/product',
+      path: '/product/:id',
       name: 'product',
       component: DetailView
     },
@@ -39,7 +41,20 @@ const router = createRouter({
       name: 'success',
       component: SuccessView
     },
-  ]
+    {
+      path: '/categories',
+      name: 'categories',
+      component: CategoriesView
+    },
+    {
+      path: '/category/:id',
+      name: 'category',
+      component: CategoryView
+    },
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  },
 })
 
 export default router

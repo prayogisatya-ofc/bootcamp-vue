@@ -20,4 +20,9 @@ export default {
 .nav-link.router-link-active {
   color: rgb(79, 70, 229) !important
 }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
 </style>

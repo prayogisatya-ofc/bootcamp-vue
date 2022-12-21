@@ -1,5 +1,7 @@
 <script>
 import { RouterLink } from 'vue-router'
+import axios from 'axios';
+import { useUserStore } from '@/stores/user';
 
 export default {
   data() {
@@ -7,7 +9,26 @@ export default {
       form : {
         email: '',
         password: ''
-      }
+      },
+      userStore: useUserStore()
+    }
+  },
+  methods: {
+    async login(){
+        try {
+            const response = await axios.post('https://zullkit-backend.buildwithangga.id/api/login', {
+              email: this.form.email,
+              password: this.form.password
+            })
+            localStorage.setItem("access_token", response.data.data.access_token)
+            localStorage.setItem("token_type", response.data.data.token_type)
+
+            this.userStore.fetchUser()
+            this.$router.push('/')
+        } catch(error){
+            alert('Login gagal!')
+            console.log(error);
+        }
     }
   },
 };
@@ -22,7 +43,7 @@ export default {
         >
           <div class="w-full p-5 mx-auto sm:max-w-md">
             <h2 class="mb-20 text-5xl font-bold text-center">Welcome Back</h2>
-            <form>
+            <form @submit.prevent="login()">
               <div class="mb-4">
                 <label class="block mb-1" for="email">Email Address</label>
                 <input
@@ -47,7 +68,7 @@ export default {
               </div>
               <div class="mt-6">
                 <button
-                  type="button"
+                  type="submit"
                   class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 md:py-2 md:text-lg md:px-10 hover:shadow"
                 >
                   Sign In

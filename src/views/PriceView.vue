@@ -1,5 +1,32 @@
 <script>
 import { RouterLink } from "vue-router";
+import axios from 'axios';
+import { useUserStore } from '@/stores/user';
+
+export default {
+  data(){
+    return {
+      userStore: useUserStore()
+    }
+  },
+  methods: {
+    async checkout(amount){
+      try {
+        const response = await axios.post('https://zullkit-backend.buildwithangga.id/api/checkout', {
+          payment_total: amount,
+          payment_status: "PENDING"
+        }, {
+          headers: {
+            Authorization: localStorage.getItem('token_type') + " " + localStorage.getItem('access_token')
+          }
+        })
+        window.location.href = response.data.data.payment_url
+      } catch(error){
+        console.log(error);
+      }
+    },
+  },
+}
 </script>
 
 <template>
@@ -70,12 +97,18 @@ import { RouterLink } from "vue-router";
                       Pre-built design screen
                     </li>
                   </ul>
-                  <a
-                    href="checkout.html"
+                  <button v-if="userStore.isLoggedIn"
+                    @click="checkout(2000)"
                     class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-medium text-black bg-gray-200 border border-transparent rounded-full hover:bg-gray-300 md:py-2 md:text-md md:px-10 hover:shadow"
                   >
                     Checkout Now
-                  </a>
+                  </button>
+                  <RouterLink v-else
+                    to="/login"
+                    class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-medium text-black bg-gray-200 border border-transparent rounded-full hover:bg-gray-300 md:py-2 md:text-md md:px-10 hover:shadow"
+                  >
+                    Checkout Now
+                  </RouterLink>
                 </div>
               </div>
               <div>
@@ -160,12 +193,18 @@ import { RouterLink } from "vue-router";
                       Unlock cloning app
                     </li>
                   </ul>
-                  <a
-                    href="checkout.html"
+                  <button v-if="userStore.isLoggedIn"
+                    @click="checkout(9000)"
                     class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 md:py-2 md:text-md md:px-10 hover:shadow"
                   >
                     Checkout Now
-                  </a>
+                  </button>
+                  <RouterLink v-else
+                    to="/login"
+                    class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 md:py-2 md:text-md md:px-10 hover:shadow"
+                  >
+                    Checkout Now
+                  </RouterLink>
                 </div>
               </div>
             </div>

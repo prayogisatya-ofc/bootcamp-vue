@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import CategoriesCard from '@/components/CategoriesCard.vue';
 import ItemsCard from '@/components/ItemsCard.vue';
 
@@ -9,19 +10,32 @@ export default {
   },
   data(){
     return {
-      categories: [
-        {id: 1, title: "UI Mobile Kit", count: 703, image: "/src/assets/img/categories-1.jpg"},
-        {id: 2, title: "Fonts", count: 657, image: "/src/assets/img/categories-2.jpg"},
-        {id: 3, title: "Icon Set", count: 4500, image: "/src/assets/img/categories-3.jpg"},
-        {id: 4, title: "Website UI Kit", count: 83499, image: "/src/assets/img/categories-4.jpg"},
-      ],
-      items: [
-        {id: 1, title: "Mobile UI Kit", category: "Mobile UI Kit", image: "/src/assets/img/items-1.jpg"},
-        {id: 2, title: "Online Doctor Consultant", category: "Website UI Kit", image: "/src/assets/img/items-2.jpg"},
-        {id: 3, title: "Banking Crypto", category: "Mobile UI Kit", image: "/src/assets/img/items-3.jpg"},
-      ],
+      categories: [],
+      items: [],
     }
-  }
+  },
+  methods: {
+    async getCategories(){
+      try {
+        const response = await axios.get('https://zullkit-backend.buildwithangga.id/api/categories?limit=4')
+        this.categories = response.data.data.data
+      } catch(error){
+        console.log(error);
+      }
+    },
+    async getProducts(){
+      try {
+        const response = await axios.get('https://zullkit-backend.buildwithangga.id/api/products?limit=3')
+        this.items = response.data.data.data
+      } catch(error){
+        console.log(error);
+      }
+    } 
+  },
+  mounted(){
+    this.getCategories()
+    this.getProducts()
+  },
 }
 </script>
 
@@ -54,7 +68,7 @@ export default {
               >
                 <div class="rounded-full">
                   <a
-                    href="#"
+                    href="#categories"
                     class="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 md:py-2 md:text-lg md:px-10 hover:shadow"
                   >
                     Browse Now
@@ -74,12 +88,12 @@ export default {
       </div>
     </div>
 
-    <div class="container px-4 mx-auto my-16 md:px-12">
+    <div class="container px-4 mx-auto my-16 md:px-12" id="categories">
       <h2 class="mb-4 text-xl font-medium md:mb-0 md:text-lg">
         Top Categories
       </h2>
       <div class="flex flex-wrap -mx-1 lg:-mx-4">
-        <CategoriesCard v-for="category in categories" :key="category.id" :title="category.title" :count="category.count" :image="category.image"/>
+        <CategoriesCard v-for="category in categories" :key="category.id" :title="category.name" :count="category.products_count" :image="category.thumbnails" :id="category.id"/>
       </div>
     </div>
 
@@ -88,9 +102,10 @@ export default {
       <div class="flex flex-wrap -mx-1 lg:-mx-4">
         <itemsCard 
         v-for="item in items" :key="item.id"
-        :title="item.title"
-        :category="item.category"
-        :image="item.image"
+        :id="item.id"
+        :title="item.name"
+        :category="item.category.name"
+        :image="item.thumbnails"
         />
       </div>
     </div>
